@@ -36,14 +36,15 @@ export default class Pokemon extends Component {
             specialAttack: "",
             specialDefense: "",
         },
-        height: "",
-        weight: "",
-        eggGroup: '',
+        height: '',
+        weight: '',
+        eggGroups: '',
+        catchRate: '',
         abilities: '',
-        genderRetioMale: '',
-        genderRatioFamale: "",
-        evs: "",
-        hatchSteps: ""
+        genderRatioMale: '',
+        genderRatioFemale: '',
+        evs: '',
+        hatchSteps: ''
     };
 
     async componentDidMount() {
@@ -101,7 +102,9 @@ export default class Pokemon extends Component {
             if (stat.effort > 0) {return true;}
             return false;
         }).map(stat => {
-            return `${stat.effor} ${stat.stat.name}`.toLowerCase().split('-').map(s => s.charAt(0).toUpperCase() + s.substring(1)).join(' ');
+            return `${stat.effort} ${stat.stat.name
+                .toLowerCase().split('-').map(s => s.charAt(0).toUpperCase() + s.substring(1)).join(' ')
+            }`;
         }).join(', ');
 
         //Get descrição dos pokemons
@@ -115,20 +118,21 @@ export default class Pokemon extends Component {
             });
 
             const femaleRate = res.data['gender_rate'];
-            const genderRatioFamale = 12.5 * femaleRate;
-            const genderRetioMale = 12.5 * (8 - femaleRate);
+            const genderRatioFemale = 12.5 * femaleRate;
+            const genderRatioMale = 12.5 * (8 - femaleRate);
 
-            const cacthRate = Math.round((100/255) * res.data["Capture_rate"]);
+            const catchRate = Math.round((100 / 255) * res.data['capture_rate']);
 
             const eggGroups = res.data['egg_groups'].map(group => {
                 return group.name.toLowerCase().split('-').map(s => s.charAt(0).toUpperCase() + s.substring(1)).join(' ');
             }).join(", ");
             
-            const hatchSteps = 255 * (res.data["Hatch_counter"] + 1);
+            const hatchSteps = 255 * (res.data["hatch_counter"] + 1);
             this.setState({
                 description,
-                genderRatioFamale,
-                cacthRate,
+                genderRatioFemale,
+                genderRatioMale,
+                catchRate,
                 eggGroups,
                 hatchSteps
             });
@@ -327,37 +331,76 @@ export default class Pokemon extends Component {
                                 </div>
                               </div>
                               <div className="row">
+
                                 <div className="col-md-6">  
                                     <h6 className="float-right">Gender Ratio:</h6>
                                 </div>
                                 <div className="col-md-6">
                                     <div className="progress">
-                                    <div className="progress-bar" role="progressbar" style={{width: `${this.state.genderRatioFamale}%`, 
+                                    <div className="progress-bar" role="progressbar" style={{width: `${this.state.genderRatioFemale}%`, 
                                     backgroundColor: "#C2185B"
                                     }}
                                     aria-valuenow="15"
                                     aria-valuemin="0"
                                     aria-valuemax="100"
                                     >
-                                        <small>{this.state.genderRatioFamale}</small>
+                                        <small>{this.state.genderRatioFemale}</small>
                                     </div>
                                     <div className="progress-bar"
                                         role="progressbar"
-                                        style={{width: `${this.state.genderRetioMale}%`,
+                                        style={{width: `${this.state.genderRatioMale}%`,
                                                 backgroundColor: '#1976D2'   
                                         }}
                                         aria-valuenow="30"
                                         aria-valuemin="0"
                                         aria-valuemax="100"
                                     >   
-                                        <small>{this.state.genderRetioMale}</small>
+                                        <small>{this.state.genderRatioMale}</small>
                                     </div>    
                                     </div>
                                 </div>
                               </div>
+                            
+                            </div>
+                            <div className="col-md-6">
+                                <div className="row">
+                                    <div className="col-md-6">
+                                        <h6 className="float-right">Egg Groups:</h6>
+                                    </div>
+                                    <div className="col-md-6">
+                                        <h6 className="float-left">{this.state.eggGroups}</h6>
+                                    </div>
+                                </div>
+                                <div className="row">
+                                    <div className="col-md-6">
+                                        <h6 className="float-right">Hatch Steps:</h6>
+                                    </div>
+                                    <div className="col-md-6">
+                                        <h6 className="float-left">{this.state.hatchSteps}</h6>
+                                    </div>
+                                </div>
+                                <div className="row">
+                                    <div className="col-md-6">
+                                        <div className="float-right">Abilities:</div>
+                                    </div>
+                                    <div className="col-md-6">
+                                        <h6 className="float-left">{this.state.abilities}</h6>
+                                    </div>
+                                </div>
+                                <div className="row">
+                                    <div className="col-md-6">
+                                        <h6 className="float-right">Evs:</h6>
+                                    </div>
+                                    <div className="col-md-6">
+                                    <h6 className="float-left">{this.state.evs}</h6>
+                                    </div>
+                                </div>
                             </div>
                       </div>
                   </div>
+                  <div className="card-footer text-muted">
+                          Data From <a href="https://pokeapi.co/" target="_blank" className="card-link">PokeAPI.co</a>
+                    </div>
               </div>
           </div>  
         );
