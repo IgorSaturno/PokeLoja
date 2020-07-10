@@ -4,8 +4,8 @@ import styled from 'styled-components';
 import spinner from '../pokemon/spinner.gif';
 
 const Sprite = styled.img`
-    width: 5em;
-    height: 5em;
+    width: 8em;
+    height: 8em;
     display: none;
 `;
 
@@ -20,6 +20,7 @@ const Card = styled.div`
     -webkit-user-select: none;
     -ms-user-select: none;
     -o-user-select: none;
+    border-radius: 30px;
 `;
 
 const StyledLink = styled(Link)`
